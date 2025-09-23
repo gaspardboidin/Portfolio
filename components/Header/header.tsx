@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Github } from "lucide-react";
+import { Calendar } from "lucide-react";
 import Link from "next/link";
 
 export default function Header() {
@@ -16,11 +16,12 @@ export default function Header() {
           <p className="text-lg font-semibold text-white">Gaspard Boidin</p>
         </div>
         <Link
-          href="https://github.com/gaspardboidin"
+          href="https://calendly.com/gboidin-16/audit-gratuit-15-min"
           target="_blank"
-          className="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-500/10 transition-colors duration-200 bg-white/10"
         >
-          <Github className="w-5 h-5 text-white" />
+          <Calendar className="w-4 h-4 text-white" />
+          <span className="text-sm font-medium text-white">Rendez-vous</span>
         </Link>
       </header>
     </div>
