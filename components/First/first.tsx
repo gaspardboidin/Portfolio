@@ -1,0 +1,71 @@
+"use client";
+
+import { Download, Github, Linkedin, Mail } from "lucide-react";
+import DarkVeil from "../DarkVeil";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+
+export default function First() {
+  return (
+    <div className="relative h-screen overflow-hidden flex justify-center items-center w-full">
+      {/* Animation en arrière-plan */}
+      <div className="absolute inset-0 z-0 h-screen w-full">
+        <DarkVeil
+          speed={0.5}
+          hueShift={19}
+          noiseIntensity={0}
+          scanlineIntensity={0.5}
+          scanlineFrequency={0}
+          warpAmount={0}
+          backgroundColor="#0B0E14"
+        />
+        {/* <div className="absolute inset-0 bg-background/50" /> */}
+      </div>
+
+      {/* Contenu principal */}
+      <div className="relative z-10 flex justify-center items-center max-w-7xl mx-auto pb-20 md:pb-30 w-full h-screen flex-col md:flex-row lg:justify-between items-center">
+        <div className="flex flex-col gap-4 max-w-2xl p-8 order-last md:order-first">
+          <div className="flex flex-col mb-2 ">
+            <h3 className="text-xl font-medium text-blue-500">
+              Bonjour, je suis
+            </h3>
+            {/* C'est mauvais ici car le composant <BlurText /> requiert les propriétés obligatoires 'animationFrom' et 'animationTo' selon sa définition TypeScript. Même si la documentation suggère d'utiliser le composant de cette façon, il faut fournir ces propriétés pour satisfaire le typage. Par exemple : */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground">
+              Gaspard Boidin
+            </h1>
+          </div>
+          <div className="flex flex-col gap-4">
+            <p className="text-lg md:text-xl lg:text-2xl text-primary-foreground">
+              Software Engineer. Je conçois et développe des applications
+              modernes, performantes et scalables.
+            </p>
+            <div className="gap-4 flex flex-col sm:flex-row flex-wrap">
+              <Button className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer">
+                <Mail className="w-4 h-4" />
+                Email
+              </Button>
+              <Button className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer">
+                <Download className="w-4 h-4" />
+                Download CV
+              </Button>
+              <Button className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer">
+                <Github className="w-4 h-4" />
+                Github
+              </Button>
+              <Button className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer">
+                <Linkedin className="w-4 h-4" />
+                LinkedIn
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 p-8 items-center lg:items-end order-first lg:order-last">
+          <Avatar className="h-40 w-40 md:h-50 md:w-50 lg:h-60 lg:w-60">
+            <AvatarImage src="/profile.jpg" />
+            <AvatarFallback>GB</AvatarFallback>
+          </Avatar>
+        </div>
+      </div>
+    </div>
+  );
+}
