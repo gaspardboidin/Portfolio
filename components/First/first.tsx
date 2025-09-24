@@ -98,7 +98,7 @@ export default function First() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-4 p-8 items-center lg:items-end order-first lg:order-last">
+        <div className="hidden md:flex flex-col gap-4 p-8 items-center lg:items-end order-first lg:order-last">
           <Avatar className="h-40 w-40 md:h-50 md:w-50 lg:h-60 lg:w-60">
             <AvatarImage src="/profile.jpg" />
             <AvatarFallback>GB</AvatarFallback>

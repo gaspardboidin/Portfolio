@@ -60,9 +60,9 @@
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #0b1325;
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #3C4863;
+  --input: #3C4863;
+  --ring: #3C4863;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -94,7 +94,7 @@
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: #3C4863;
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -118,5 +118,50 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Styles personnalisés pour les inputs */
+  input[data-slot="input"] {
+    border-color: #3C4863 !important;
+  }
+  
+  textarea[data-slot="textarea"] {
+    border-color: #3C4863 !important;
+  }
+  
+  [data-slot="select-trigger"] {
+    border-color: #3C4863 !important;
+  }
+  
+  /* Styles pour les boutons de budget */
+  .budget-button {
+    border-color: #3C4863 !important;
+    background-color: transparent !important;
+    color: #E5E7EB !important;
+    cursor: pointer !important;
+  }
+  
+  .budget-button:hover {
+    background-color: #3C4863 !important;
+    color: white !important;
+  }
+  
+  .budget-button.selected {
+    background-color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+    color: white !important;
+  }
+  
+  /* Cursor pointer pour tous les éléments cliquables */
+  button, 
+  [role="button"], 
+  input[type="button"], 
+  input[type="submit"], 
+  input[type="reset"],
+  [data-slot="select-trigger"],
+  [data-slot="checkbox"],
+  a,
+  .cursor-pointer {
+    cursor: pointer !important;
   }
 }
