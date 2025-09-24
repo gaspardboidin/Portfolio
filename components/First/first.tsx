@@ -42,7 +42,7 @@ export default function First() {
       </div>
 
       {/* Contenu principal */}
-      <div className="relative z-10 flex justify-center items-center max-w-7xl mx-auto pb-20 md:pb-30 w-full h-screen flex-col md:flex-row lg:justify-between items-center pt-30 md:pt-0">
+      <div className="relative z-10 flex justify-center items-center max-w-7xl mx-auto w-full h-screen flex-col md:flex-row lg:justify-between">
         <div className="flex flex-col gap-4 max-w-2xl p-8 order-last md:order-first">
           <div className="flex flex-col mb-2 ">
             <h3 className="text-xl font-medium text-blue-500">
