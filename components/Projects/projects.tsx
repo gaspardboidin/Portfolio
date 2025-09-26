@@ -1,7 +1,7 @@
 "use client";
 
 import { Project } from "@/types/project";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clock } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
 import {
@@ -36,9 +36,10 @@ const projects: Project[] = [
     title: "Le paddock",
     description:
       "Plateforme F1 qui centralise classements pilotes/constructeurs, calendrier, fiches circuits, compte à rebours et résultats par session (FP, Qualif, Sprint, Course). Expérience fluide avec vues rapides, favoris et espace admin pour gérer les données et futures fonctionnalités.",
-    link: "https://www.google.com",
+    link: null, // Bientôt disponible
     logo: "/F1_white.svg",
     tags: ["React", "Next.js", "PostgreSQL", "BetterAuth"],
+    comingSoon: true,
   },
 ];
 
@@ -52,8 +53,16 @@ export default function Projects() {
         {projects.map((project) => (
           <Card
             key={project.id}
-            className="w-full bg-card gap-4 rounded-3xl cursor-pointer"
-            onClick={() => window.open(project.link, "_blank")}
+            className={`w-full bg-card gap-4 rounded-3xl ${
+              project.comingSoon
+                ? "cursor-default opacity-75"
+                : "cursor-pointer"
+            }`}
+            onClick={() =>
+              !project.comingSoon &&
+              project.link &&
+              window.open(project.link, "_blank")
+            }
           >
             <CardHeader className="flex flex-col gap-2 justify-between px-6 py-2">
               <div className="flex flex-row items-center justify-between w-full">
@@ -63,11 +72,20 @@ export default function Projects() {
                   width={30}
                   height={30}
                 />
-                <ArrowRight className="w-4 h-4 text-primary-foreground" />
+                {project.comingSoon ? (
+                  <Clock className="w-4 h-4 text-orange-500" />
+                ) : (
+                  <ArrowRight className="w-4 h-4 text-primary-foreground" />
+                )}
               </div>
 
-              <CardTitle className="text-base sm:text-lg uppercase text-primary-foreground">
+              <CardTitle className="text-base sm:text-lg uppercase text-primary-foreground flex items-center gap-2">
                 {project.title}
+                {project.comingSoon && (
+                  <Badge className="text-xs bg-orange-500 text-white">
+                    Bientôt disponible
+                  </Badge>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent className="px-6 pb-6">

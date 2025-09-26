@@ -2,9 +2,10 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  link: string;
+  link: string | null;
   logo: string;
   tags: string[];
+  comingSoon?: boolean;
 }
 
 export interface Formation {
@@ -13,6 +14,7 @@ export interface Formation {
   description: string;
   logo: string;
   tags: string[];
+  inProgress?: boolean;
 }
 
 export interface ProjectForm {

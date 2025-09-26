@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Download, Github, Linkedin, Mail } from "lucide-react";
+import { ChevronDown, Github, Linkedin, Mail } from "lucide-react";
 import { useState } from "react";
 import DarkVeil from "../DarkVeil";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -60,7 +60,7 @@ export default function First() {
             </p>
             <div className="gap-4 flex flex-col sm:flex-row flex-wrap">
               <Button
-                className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer"
+                className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer hover:bg-blue-600"
                 onClick={handleEmailClick}
               >
                 <Mail className="w-4 h-4" />
@@ -70,12 +70,8 @@ export default function First() {
                   ? "gboidin.16@gmail.com"
                   : "Email"}
               </Button>
-              <Button className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer">
-                <Download className="w-4 h-4" />
-                Download CV
-              </Button>
               <Button
-                className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer"
+                className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer hover:bg-blue-600"
                 onClick={() =>
                   window.open("https://github.com/gaspardboidin", "_blank")
                 }
@@ -84,7 +80,7 @@ export default function First() {
                 Github
               </Button>
               <Button
-                className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer"
+                className="bg-blue-500 text-primary-foreground rounded-xl cursor-pointer hover:bg-blue-600"
                 onClick={() =>
                   window.open(
                     "https://www.linkedin.com/in/gaspard-boidin/",

@@ -1,12 +1,13 @@
 "use client";
 
+import emailjs from "@emailjs/browser";
+import { Calendar, CheckCircle, Send, XCircle } from "lucide-react";
 import { useState } from "react";
-import { Calendar, Send } from "lucide-react";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { Label } from "../ui/label";
+import { Card, CardContent } from "../ui/card";
 import { Checkbox } from "../ui/checkbox";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
@@ -14,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Card, CardContent } from "../ui/card";
+import { Textarea } from "../ui/textarea";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -28,22 +29,62 @@ export default function Contact() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [notification, setNotification] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
 
   const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
+  };
+
+  const handlePhoneChange = (value: string) => {
+    // Supprimer tous les caractères non numériques
+    const numericValue = value.replace(/\D/g, "");
+
+    // Limiter à 10 chiffres maximum
+    if (numericValue.length <= 10) {
+      // Formater comme 0X XX XX XX XX
+      let formatted = numericValue;
+      if (numericValue.length > 0) {
+        formatted = numericValue.replace(/(\d{2})(?=\d)/g, "$1 ");
+      }
+      handleInputChange("phone", formatted);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulation d'envoi - à remplacer par la vraie logique
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert("Message envoyé avec succès !");
+
+    try {
+      // Configuration EmailJS
+      const serviceId = "service_iust84b";
+      const templateId = "template_ex9sj53"; // Vous devrez créer ce template dans EmailJS
+      const publicKey = "6Cu3dFHrm5AEfwfPY"; // Remplacez par votre clé publique
+
+      // Préparer les données pour EmailJS
+      const templateParams = {
+        from_name: formData.fullName,
+        from_email: formData.email,
+        phone: formData.phone,
+        project_type: formData.projectType,
+        budget: formData.budget,
+        message: formData.message,
+        to_name: "Gaspard", // Votre nom
+      };
+
+      // Envoyer l'email
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+
+      // Succès
+      setNotification({
+        type: "success",
+        message: "Message envoyé avec succès !",
+      });
       setFormData({
         fullName: "",
         email: "",
@@ -53,7 +94,25 @@ export default function Contact() {
         message: "",
         agreeNDA: false,
       });
-    }, 2000);
+
+      // Masquer la notification après 5 secondes
+      setTimeout(() => {
+        setNotification({ type: null, message: "" });
+      }, 5000);
+    } catch (error) {
+      console.error("Erreur lors de l'envoi:", error);
+      setNotification({
+        type: "error",
+        message: "Erreur lors de l'envoi du message. Veuillez réessayer.",
+      });
+
+      // Masquer la notification après 5 secondes
+      setTimeout(() => {
+        setNotification({ type: null, message: "" });
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const budgetRanges = [
@@ -65,13 +124,39 @@ export default function Contact() {
   ];
 
   return (
-    <div className="flex flex-col gap-4 max-w-7xl mx-auto p-8 w-full mb-10 sm:mb-20">
+    <div className="flex flex-col gap-4 max-w-7xl mx-auto p-8 w-full">
       <h2 className="text-xl sm:text-2xl font-semibold text-primary-foreground mb-4">
         Contact
       </h2>
-      
+
       <Card className="bg-card rounded-3xl">
         <CardContent className="px-6 pb-6">
+          {/* Notification */}
+          {notification.type && (
+            <div
+              className={`mb-6 p-4 rounded-xl flex items-center gap-3 ${
+                notification.type === "success"
+                  ? "bg-green-500/10 border border-green-500/20"
+                  : "bg-red-500/10 border border-red-500/20"
+              }`}
+            >
+              {notification.type === "success" ? (
+                <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+              ) : (
+                <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+              )}
+              <p
+                className={`text-sm ${
+                  notification.type === "success"
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                {notification.message}
+              </p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Nom complet */}
             <div className="space-y-2">
@@ -84,6 +169,7 @@ export default function Contact() {
                 placeholder="John Doe"
                 value={formData.fullName}
                 onChange={(e) => handleInputChange("fullName", e.target.value)}
+                className="placeholder:text-gray-400 text-white"
                 required
               />
             </div>
@@ -99,6 +185,7 @@ export default function Contact() {
                 placeholder="your@mail.com"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
+                className="placeholder:text-gray-400 text-white"
                 required
               />
             </div>
@@ -111,9 +198,10 @@ export default function Contact() {
               <Input
                 id="phone"
                 type="tel"
-                placeholder="+33 6 12 34 56 78"
+                placeholder="06 12 34 56 78"
                 value={formData.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
+                onChange={(e) => handlePhoneChange(e.target.value)}
+                className="placeholder:text-gray-400 text-white"
               />
             </div>
 
@@ -124,10 +212,15 @@ export default function Contact() {
               </Label>
               <Select
                 value={formData.projectType}
-                onValueChange={(value) => handleInputChange("projectType", value)}
+                onValueChange={(value) =>
+                  handleInputChange("projectType", value)
+                }
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Sélectionnez votre option" />
+                <SelectTrigger className="w-full text-white">
+                  <SelectValue
+                    placeholder="Sélectionnez votre option"
+                    className="placeholder:text-gray-400"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="web-app">Application Web</SelectItem>
@@ -172,6 +265,7 @@ export default function Contact() {
                 placeholder="Entrez votre message ici"
                 value={formData.message}
                 onChange={(e) => handleInputChange("message", e.target.value)}
+                className="placeholder:text-gray-400 text-white"
                 required
                 rows={4}
               />
@@ -182,7 +276,10 @@ export default function Contact() {
               <Checkbox
                 id="nda"
                 checked={formData.agreeNDA}
-                onCheckedChange={(checked) => handleInputChange("agreeNDA", checked as boolean)}
+                onCheckedChange={(checked) =>
+                  handleInputChange("agreeNDA", checked as boolean)
+                }
+                className="data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500 data-[state=checked]:text-white border-white"
               />
               <Label htmlFor="nda" className="text-primary-foreground text-sm">
                 J'accepte que vous utilisiez mes informations pour me contacter
@@ -194,24 +291,41 @@ export default function Contact() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-500 text-primary-foreground rounded-xl hover:bg-blue-600"
+                className="w-full bg-blue-500 text-white rounded-xl hover:bg-blue-600"
               >
                 <Send className="w-4 h-4 mr-2" />
                 {isSubmitting ? "Envoi en cours..." : "Envoyer votre message"}
               </Button>
-              
+
+              {/* Séparateur */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-500" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-gray-500">ou</span>
+                </div>
+              </div>
+
               <div className="text-center">
                 <p className="text-primary-foreground/80 text-sm mb-2">
-                  Ou prendre un rendez-vous directement avec moi
+                  Prendre un rendez-vous directement avec moi
                 </p>
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full bg-blue-500 text-primary-foreground rounded-xl hover:bg-blue-600 border-blue-500"
-                  onClick={() => window.open("https://calendly.com/gboidin-16/audit-gratuit-15-min", "_blank")}
+                  className="w-full bg-blue-500 text-white rounded-xl hover:bg-blue-600 hover:text-white border-blue-500"
+                  onClick={() =>
+                    window.open(
+                      "https://calendly.com/gboidin-16/audit-gratuit-15-min",
+                      "_blank"
+                    )
+                  }
                 >
                   <Calendar className="w-4 h-4 mr-2" />
-                  <span className="hidden sm:inline">Prendre un rendez-vous de 15 minutes</span>
+                  <span className="hidden sm:inline">
+                    Prendre un rendez-vous de 15 minutes
+                  </span>
                   <span className="sm:hidden">Prendre rendez-vous</span>
                 </Button>
               </div>
